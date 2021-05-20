@@ -9,23 +9,45 @@ Window {
     visible: true
     title: qsTr("socket_chat")
 
-    ColumnLayout {
+    ColumnLayout
+    {
         anchors.fill: parent
-        ListView {
+        ListView
+        {
             Layout.fillHeight: true
             Layout.fillWidth: true
             clip: true
+            model:ListModel
+            {
+                  ListElement
+                  {
+                      message: "hi"
+                  }
+            }
+            delegate:ItemDelegate
+            {
+                text:message
+            }
+            ScrollBar.vertical: ScrollBar{}
         }
-        RowLayout {
-            TextField {
+        RowLayout
+        {
+            TextField
+            {
+                id: textMessage
                 placeholderText: qsTr("socket_chat")
                 Layout.fillWidth: true
                 onAccepted: send.clicked()
             }
-            Button {
+            Button
+            {
                 id: send
                 text: qsTr("Send")
-                onClicked: console.log("Sent") //send to server
+                onClicked:
+                {
+                    console.log("Sent") //send to server
+                    textMessage.clear()
+                }
             }
         }
     }
