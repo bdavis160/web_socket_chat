@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/bdavis160/web_socket_chat/issues"
   },
-  "homepage": "https://github.com/bdavis160/web_socket_chat#readme"
+  "homepage": "https://github.com/bdavis160/web_socket_chat#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
