@@ -48,6 +48,7 @@ Window {
                 ListModel //add some styling
                 {
                       id: messageList
+
                       ListElement
                       {
                           message: ""
@@ -57,7 +58,16 @@ Window {
                 ItemDelegate
             {
                 id:messageDelegate
-                text:message
+                Rectangle
+                {
+                    color: "green"
+                    Text
+                    {
+                        text:message
+                    }
+                    width: childrenRect.width
+                    height: childrenRect.height
+                }
             }
             ScrollBar.vertical: ScrollBar{}
         }
