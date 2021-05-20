@@ -9,27 +9,65 @@ Window {
     visible: true
     title: qsTr("socket_chat")
 
+
     ColumnLayout
     {
         anchors.fill: parent
+
+        /*ListModel {
+            ListElement
+            {
+                message: "hi"
+            }
+            ListElement
+            {
+                message: "oh hey"
+            }
+        }
+
         ListView
         {
             Layout.fillHeight: true
             Layout.fillWidth: true
             clip: true
-            model:ListModel
+            delegate: Text
             {
-                  ListElement
-                  {
-                      message: "hi"
-                  }
+                text: message
             }
+        }
+
+        */
+        ListModel
+        {
+              id: messageList
+              ListElement
+              {
+                  message: ""
+              }
+        }
+
+        ListView
+        {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            clip: true
+            model: messageList
             delegate:ItemDelegate
             {
                 text:message
             }
             ScrollBar.vertical: ScrollBar{}
         }
+
+        Text
+        {
+            id: t
+            //anchors.left: parent
+            text:""
+        }
+
+
+
         RowLayout
         {
             TextField
@@ -46,10 +84,15 @@ Window {
                 onClicked:
                 {
                     console.log("Sent") //send to server
-                    textMessage.clear()
+                    //sentMessage.insert(textMessage.text)
+                    messageList.append({"message": textMessage.text})
+                    //messageList.remove()
+                    textMessage.text=""
                 }
             }
         }
+
+
     }
 }
 
