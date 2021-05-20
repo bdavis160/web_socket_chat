@@ -37,23 +37,26 @@ Window {
         }
 
         */
-        ListModel
-        {
-              id: messageList
-              ListElement
-              {
-                  message: ""
-              }
-        }
+
 
         ListView
         {
             Layout.fillHeight: true
             Layout.fillWidth: true
             clip: true
-            model: messageList
-            delegate:ItemDelegate
+            model:
+                ListModel //add some styling
+                {
+                      id: messageList
+                      ListElement
+                      {
+                          message: ""
+                      }
+                }
+            delegate:
+                ItemDelegate
             {
+                id:messageDelegate
                 text:message
             }
             ScrollBar.vertical: ScrollBar{}
@@ -63,7 +66,7 @@ Window {
         {
             id: t
             //anchors.left: parent
-            text:""
+            text:""//textMessage.text
         }
 
 
@@ -77,6 +80,7 @@ Window {
                 Layout.fillWidth: true
                 onAccepted: send.clicked()
             }
+
             Button
             {
                 id: send
@@ -84,10 +88,11 @@ Window {
                 onClicked:
                 {
                     console.log("Sent") //send to server
-                    //sentMessage.insert(textMessage.text)
                     messageList.append({"message": textMessage.text})
-                    //messageList.remove()
-                    textMessage.text=""
+                    //t.text += textMessage.text
+                    //textMessage.text="Oops"
+                    textMessage.clear()
+
                 }
             }
         }
