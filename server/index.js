@@ -1,9 +1,9 @@
 const http = require('http');
 const webSocket = require('ws');
-const express = require ('express')
-const port = 5500
-const server = http.createServer(express)
-const wss = new webSocket.Server( {server})
+const express = require ('express');
+const port = 8080;
+const server = http.createServer(express);
+const wss = new webSocket.Server( {server});
 
 wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(data) {
