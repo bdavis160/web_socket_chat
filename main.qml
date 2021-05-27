@@ -24,7 +24,7 @@ Window {
                                 console.log("Error: " + socket.errorString)
                             } else if (socket.status == WebSocket.Open)
                             {
-                               console.log("Socket Open!!")
+                               console.log("Socket Open!")
                             } else if (socket.status == WebSocket.Closed)
                             {
                                 console.log("Socket Closed :(")
@@ -54,7 +54,7 @@ Window {
 
                       ListElement
                       {
-                          //the head of the must have a value, so an empty list would be ""
+                          //the head of the must have a value
                           message: "Welcome to the chat!"
                       }
                 }
@@ -105,7 +105,6 @@ Window {
                     loginLayout.visible = false
                     messageColumn.anchors.fill = messageColumn.parent
                     messageLayout.visible = true
-                    console.log(username.text)
                 }
             }
         }
@@ -132,7 +131,6 @@ Window {
                     messageList.append({"message": "(Me): " + messageBox.text })
                     socket.sendTextMessage("(" + username.text + "): " + messageBox.text)
                     messageBox.clear()
-                    console.log(username.text)
                 }
             }
         }
