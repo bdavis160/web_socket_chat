@@ -3,95 +3,66 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtWebSockets 1.1
+
+//chat window
 Window {
     width:640
     height: 480
     visible: true
     title: qsTr("socket_chat")
+    color:"blue"
 
     WebSocket {
            id: socket
            url: "ws://localhost:8080"
            onTextMessageReceived: {
-               messageList.append({"message": "\nNew message: " + message})
+               messageList.append({"message": message})
            }
 
-           onStatusChanged: if (socket.status == WebSocket.Error) {
+           onStatusChanged: if (socket.status == WebSocket.Error)
+                            {
                                 console.log("Error: " + socket.errorString)
-                            } else if (socket.status == WebSocket.Open) {
+                            } else if (socket.status == WebSocket.Open)
+                            {
                                console.log("Socket Open!!")
-                                //socket.sendTextMessage("Hello World")
-                            } else if (socket.status == WebSocket.Closed) {
+                            } else if (socket.status == WebSocket.Closed)
+                            {
                                 console.log("Socket Closed :(")
                             }
            active: true
 
        }
-    /*adds message to message display area and clears the textbox
-    function showMessage(messageList, messageBox) {
-        messageList.append({"message": messageBox.text})
-        messageBox.clear()
-    }
 
-    //Init connection to node server
-    function init(ws) {
-
-        if (ws) {
-            ws.onerror = ws.onopen = ws.onclose = null;
-            ws.close();
-         }
-
-         ws = new WebSocket('ws://localhost:8080');
-         ws.onopen = () => {
-            console.log('Connection opened');
-         }
-
-         ws.onmessage = ({data}) => showMessage(messageList, messageBox);
-         ws.onclose = function() {
-            ws=null;
-         }
-
-        sendButton.onclick = function() {
-            if (!ws) {
-                console.log("No Connection :(");
-                return;
-            }
-
-            ws.send(messageBox.text);
-            showMessage(messageList, messageBox);
-        }
-    }
-
-    //creates connection to node server
-    function connection() {
-        let ws
-        init(ws);
-    }
-*/
-
+    //Chatting layout/login layout depending on the state of the app
     ColumnLayout
     {
-        anchors.fill: parent
+        id: messageColumn
+        anchors.centerIn: parent
+        visible: true
 
+        //area to display text message history
         ListView
         {
             Layout.fillHeight: true
             Layout.fillWidth: true
             clip: true
+
             model:
-                ListModel //add some styling
+                ListModel
                 {
                       id: messageList
 
                       ListElement
                       {
-                          message: ""
+                          //the head of the must have a value, so an empty list would be ""
+                          message: "Welcome to the chat!"
                       }
                 }
+
             delegate:
                 ItemDelegate
             {
-                id:messageDelegate
+
                 Rectangle
                 {
                     color: "green"
@@ -102,6 +73,7 @@ Window {
                     Text
                     {
                         color: "white"
+                        padding: 7
                         text:message
                     }
                     width: childrenRect.width
@@ -111,15 +83,42 @@ Window {
             ScrollBar.vertical: ScrollBar{}
         }
 
-
-
-        RowLayout
-        {
+        //login textbox and button to create username
+        RowLayout {
+            id: loginLayout
+            visible: true
+            //Layout.alignment: verticalCenter
 
             TextField
             {
+                id: username
+                placeholderText: qsTr("User...")
+                onAccepted: createUser.clicked()
+            }
+
+            Button
+            {
+                id: createUser
+                text: qsTr("login")
+                onClicked:
+                {
+                    loginLayout.visible = false
+                    messageColumn.anchors.fill = messageColumn.parent
+                    messageLayout.visible = true
+                    console.log(username.text)
+                }
+            }
+        }
+
+        //messaging layout for sending and receiving text messages
+        RowLayout
+        {
+            visible:false
+            id:messageLayout
+            TextField
+            {
                 id: messageBox
-                placeholderText: qsTr("socket_chat")
+                placeholderText: qsTr("Your Message...")
                 Layout.fillWidth: true
                 onAccepted: send.clicked()
             }
@@ -130,13 +129,10 @@ Window {
                 text: qsTr("Send")
                 onClicked:
                 {
-                    //connection()
-                    //socket.active = true //!socket.active
-                    console.log(socket.status)
-                    console.log("Sent") //send to server
-                    messageList.append({"message": messageBox.text})
-                    socket.sendTextMessage(messageBox.text)
+                    messageList.append({"message": "(Me): " + messageBox.text })
+                    socket.sendTextMessage("(" + username.text + "): " + messageBox.text)
                     messageBox.clear()
+                    console.log(username.text)
                 }
             }
         }
